@@ -1,0 +1,619 @@
+---
+title: "AI FOR REPRODUCTIVE HEALTH IN SUB-SAHARAN AFRICA INNOVATION CHALLENGE"
+subtitle: "Application Process and Selection Report"
+author: "APHRC"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, results="hide", include=FALSE}
+
+## Set Chunk requirements
+knitr::opts_chunk$set(#include = TRUE,
+                      echo=FALSE, message = FALSE, warning = FALSE, dpi = 300,
+                      fig.height=8.5, fig.width=10.5, out.height="110%", out.width="100%"
+                      )
+
+```
+
+```{r setting working directory, include=FALSE, results = "hide"}
+
+## Setting work directory
+
+working_directory <- base::getwd()
+
+ggtheme_descriptive_plot()
+
+```
+
+\newpage
+
+# **Overview**
+
+## Background
+
+The **AI FOR REPRODUCTIVE HEALTH IN SUB SAHARAN AFRICA INNOVATION CHALLENGE** funded by the International Development Research Centre (IDRC) and the Foreign, Commonwealth & Development Office (FCDO), and implemented by the Infectious Diseases Institute (IDI) and the African Population and Health Research Center (APHRC) aims to harness the power of Artificial Intelligence (AI) to address critical challenges in maternal, sexual, and reproductive health across Africa. Through the innovation challenge, multidisciplinary teams of health professionals, technologists, and innovators will collaborate to co-create ethical, inclusive, and scalable AI-driven solutions with real-world impact.
+
+Participants will collaborate across two challenge tracks:  **Empowering Informed Contraceptive Choices** and **Early Pregnancy Loss Care**.
+
+
+## Executive Summary
+
+The application process for the Hackathon challenge ran for 2 weeks from `r format(as.Date("13/04/2026", format = "%d/%m/%Y"),"%d %B %Y")` to `r format(as.Date("03/05/2026", format = "%d/%m/%Y"),"%d %B %Y")`.
+
+Key findings from the application process include:
+
+* Female participation was slightly higher than male participation, with women accounting for 53.6% of all team member applications. This was largely influenced by the eligibility requirement that each team include at least two female members.
+* Applications were received from 24 countries across Sub-Saharan Africa, demonstrating broad geographic representation. However, submissions were concentrated in a few countries, particularly Nigeria (25.8%) and Kenya (22.5%), which together accounted for nearly half (48.4%) of all applications.
+* Regional participation was highest from Eastern Africa (44.6%), followed by Western Africa (33.3%), while Southern Africa (13.6%) and Central Africa (8.5%) had comparatively lower representation.
+* English was the dominant language of communication among applicants (84.5%), while French accounted for 14.1% and Portuguese for only 1.4%, highlighting lower participation from Francophone and Lusophone regions.
+* Interest across the two innovation challenge tracks was relatively balanced. Track II: Empowering Informed Decision-Making for Contraception received 53.1% of applications, while Track I: Access to Comprehensive Early Pregnancy Loss Care received 46.9%.
+* The final cohort comprised 20 teams (10 per track), selected to ensure regional and linguistic diversity across English-, French-, and Portuguese-speaking countries and across Eastern, Western, Central, and Southern Africa. 19 out of the 20 selected teams confirmed participation.
+
+
+## Analysis
+
+The application process data were imported into R version 4.5.0 (R Core Team, 2025) for cleaning and analysis. Descriptive statistics, including frequencies and percentages, were used to summarize socio-demographic characteristics, team formation attributes, and the distribution of applications across the various challenge tracks. The selection process was also documented to describe the progression of applications through the successive screening and evaluation stages.
+
+
+\newpage
+
+# **Applications**
+
+## Participants and Demographics
+
+This innovation challenge targeted participants from **Sub-Saharan African Countries**. The application process was conducted from `r format(min(df_clean_application_unique$application_date, na.rm=TRUE),"%d %B %Y")` to `r format(max(df_clean_application_unique$application_date, na.rm=TRUE),"%d %B %Y")` via submission through a Google form. A total of `r length(df_clean_application_unique$application_date)` group applications were received. Of these, `r length(df_clean_application_unique$application_date)-length(df_clean_application_unique_final$application_date)` were excluded: `r sum(df_clean_application_unique$email_remarks %in% c("Repeat Application"), na.rm = TRUE)` due to duplicate submissions and `r sum(df_clean_application_unique$application_remarks %in% c("Not african country", "No country mentioned"), na.rm = TRUE)` because they were from countries outside Sub-Saharan Africa. The final sample comprised `r length(df_clean_application_unique_final$application_date)` applications, representing a total of `r length(df_clean_application_final$application_date)` members.
+
+The overall gender distribution of the application teams shows a slight predominance of female members. As illustrated in Figure 1, females accounted for `r paste0(round(mean(df_clean_application_final$gender == "Female", na.rm = TRUE)*100, 1),"%")` of the total member applicant pool, while males represented `r paste0(round(sum(df_clean_application_final$gender == "Male", na.rm = TRUE)/sum(!is.na(df_clean_application_final$gender))*100, 1), "%")`. This slight female majority is largely attributable to the eligibility requirement mandating the involvement of women, whereby each team was required to include at least two female members, with team sizes ranging from three to six individuals.
+
+
+```{r, fig.cap = "Figure 1: Overall Gender distribution of team members from submitted applications"}
+
+### Distribution of application by gender 
+simple_piefun(df_clean_application_final
+              , "gender"
+              , col_values=c(GREEN3, BLUE3)
+              , donut_label_size = 7
+              , pie_label_size = 7
+              )
+
+```
+
+\newpage
+
+Table 1 summarizes the demographic composition of application teams. Majority of teams `r paste0(round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("3", "4", "5", "6"), na.rm = TRUE)*100, 1), "%")` fell within the 3 to 6 member range, consistent with the application guidelines. Only a small proportion of teams consisted of a single member `r paste0("(",round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("1"), na.rm = TRUE)*100, 1), "%", ")")`, two members `r paste0("(",round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("2"), na.rm = TRUE)*100, 1), "%", ")")` or seven members `r paste0("(",round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("7"), na.rm = TRUE)*100, 1), "%", ")")`.
+
+Teams of four members were the most common `r paste0("(",round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("4"), na.rm = TRUE)*100, 1), "%", ")")`, while teams of three, five, and six members each accounted for `r paste0(round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("3"), na.rm = TRUE)*100, 1), "%")`, `r paste0(round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("5"), na.rm = TRUE)*100, 1), "%")`, and `r paste0(round(mean(df_clean_application_unique_final$no_of_team_members_cat %in% c("6"), na.rm = TRUE)*100, 1), "%")`  of the sample, respectively.
+
+Overall, the average team size was `r round(mean(df_clean_application_unique_final$no_of_team_members, na.rm = TRUE), 1)` members `r paste0("(SD = ", round(sd(df_clean_application_unique_final$no_of_team_members, na.rm = TRUE), 1), ")")`, with a median of `r round(median(df_clean_application_unique_final$no_of_team_members, na.rm = TRUE), 0)` members `r paste0("(interquartile range: ",round(quantile(df_clean_application_unique_final$no_of_team_members, probs = c(0.25), na.rm = TRUE), 0) , " to " , round(quantile(df_clean_application_unique_final$no_of_team_members, probs = c(0.75), na.rm = TRUE), 0), ")")`, indicating a consistent pattern of moderately sized teams with limited variation. 
+
+```{r, tab.cap = "Table 1: Demographics of teams"}
+
+tab1 <- descriptive_table(df = df_clean_application_unique_final
+                          , include_vars = c("no_of_team_members_cat", "no_of_team_members")
+                          , mean_vars = c("no_of_team_members")
+                          , flex_table = TRUE
+                          , foot_note = "n (%)"
+                          ) 
+
+tab1
+
+```
+
+\newpage
+
+Applications were received from a total of `r length(unique(na.omit(df_clean_application_unique_final$country_of_citizenship)))` unique countries, indicating broad geographic representation across Sub-Saharan Africa
+
+The distribution of submitted applications by country shows a strong concentration from a few countries. Nigeria contributed the highest number of applications `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Nigeria"), na.rm = TRUE)*100, 1), "%", ")")`, followed closely by Kenya `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Kenya"), na.rm = TRUE)*100, 1), "%", ")")`. Uganda `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Uganda"), na.rm = TRUE)*100, 1), "%", ")")` also had notable participation, while Cameroon `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Cameroon"), na.rm = TRUE)*100, 1), "%", ")")` and both Ethiopia and Zimbabwe `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Ethiopia"), na.rm = TRUE)*100, 1), "%", " each)")` contributed moderate numbers.
+
+Several countries: including Malawi, Tanzania, Ghana, Benin, Democratic Republic of Congo, Zambia, Mozambique and Rwanda contributed between 1-4% of applications, while others such as Burkina Faso, Sierra Leone, Somalia, South Sudan, Burundi, Central African Republic, Chad, Guinea, Namibia and South Africa represented less than 1%.
+
+Overall, the findings indicate that while participation was geographically diverse, application submissions were heavily concentrated in a few countries, particularly Nigeria and Kenya, which together accounted for nearly half of all applications `r paste0("(",round(mean(df_clean_application_unique_final$country_of_citizenship %in% c("Nigeria", "Kenya"), na.rm = TRUE)*100, 1), "%", ")")`.
+
+```{r, fig.cap = "Figure 2: Distribution of submitted applications by country"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### Distribution of submitted applications by country
+simple_plot(df = df_clean_application_unique_final
+            , variable = "country_of_citizenship"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.2)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+
+
+```
+
+\newpage
+
+The regional distribution of submitted applications indicates that participation was highest from Eastern Africa, which accounted for `r paste0(round(mean(df_clean_application_unique_final$region %in% c("Eastern Africa"), na.rm = TRUE)*100, 1), "%")` of all applications. Western Africa also contributed substantially, representing `r paste0(round(mean(df_clean_application_unique_final$region %in% c("Western Africa"), na.rm = TRUE)*100, 1), "%")` of submissions. In comparison, Southern Africa accounted for `r paste0(round(mean(df_clean_application_unique_final$region %in% c("Southern Africa"), na.rm = TRUE)*100, 1), "%")` of applications, while Central Africa contributed the smallest share at `r paste0(round(mean(df_clean_application_unique_final$region %in% c("Central Africa"), na.rm = TRUE)*100, 1), "%")`.
+
+Participation was predominantly concentrated in Eastern and Western Africa, which together comprised more than three-quarters `r paste0("(",round(mean(df_clean_application_unique_final$region %in% c("Eastern Africa", "Western Africa"), na.rm = TRUE)*100, 1), "%", ")")` of all submitted applications.
+
+```{r, fig.cap = "Figure 3: Distribution of submitted applications by region"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### Distribution of submitted applications by region
+simple_plot(df = df_clean_application_unique_final
+            , variable = "region"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.2)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+```
+
+\newpage
+
+The linguistic preferences among submitted applications reveal a stark imbalance in the primary languages used for communication. English serves as the primary language of communication for the vast majority of submissions `r paste0("(",round(mean(df_clean_application_unique_final$language %in% c("English"), na.rm = TRUE)*100, 1), "%", ")")`. Secondary language adoption remains low. French constitutes the largest minority at `r paste0(round(mean(df_clean_application_unique_final$language %in% c("French"), na.rm = TRUE)*100, 1), "%")`, while Portuguese exhibits negligible representation, accounting for a mere `r paste0(round(mean(df_clean_application_unique_final$language %in% c("Portuguese"), na.rm = TRUE)*100, 1), "%")`.
+
+The pronounced concentration of English-language submissions suggests a highly localized applicant demographic bias toward Anglophone countries. The marginal representation of Francophone and Lusophone indicates that while the multilingual pathways are technically utilized, they play a minor role in the broader application ecosystem that has geographic outreach limitations and systemic barriers for non-English speakers.
+
+```{r, fig.cap = "Figure 4: Distribution of submitted applications by Language of communication"}
+
+### Distribution of submitted applications by Language of communication
+simple_piefun(df_clean_application_unique_final
+              , "language"
+              , col_values=c(GREEN3, BLUE3, RED3)
+              , donut_label_size = 9
+              , pie_label_size = 6
+              ) 
+
+```
+
+\newpage
+
+## Challenge Tracks
+
+The programmatic focus of the submitted applications indicates a relatively balanced distribution between the two designated innovation challenge tracks with a slight overall inclination toward innovation opportunities focused on empowering informed contraceptive decision-making. **Track II: Empowering Informed Decision-Making for Contraception** received a slightly higher proportion of applications, accounting for `r paste0(round(mean(df_clean_application_unique_final$innovation_challenge_track %in% c("Track II: Empowering Informed\n Decision-Making for Contraception"), na.rm = TRUE)*100, 1), "%")` of total submissions, while **Track I: Access to Comprehensive Early Pregnancy Loss Care** accounted for `r paste0(round(mean(df_clean_application_unique_final$innovation_challenge_track %in% c("Track I: Access to Comprehensive\n Early Pregnancy Loss Care"), na.rm = TRUE)*100, 1), "%")`.
+
+The marginal differential between Track II and Track I suggests that both thematic areas resonated almost equally with applicants. This near-even split indicates a balanced demand for funding and project implementation across both reproductive health focus areas.
+
+```{r, fig.cap = "Figure 5: Distribution of submitted applications by Challenge Tracks"}
+### Distribution of submitted applications by Challenge Tracks
+simple_piefun(df_clean_application_unique_final
+              , "innovation_challenge_track"
+              , col_values=c(GREEN3, BLUE3)
+              , donut_label_size = 9
+              , pie_label_size = 7
+              )
+```
+
+<br><br>
+
+Table 2 presents the distribution of submitted applications across the two innovation challenge tracks by country, African regions, and language of communication.
+
+\newpage
+
+```{r, tab.cap = "Table 2:  Distribution of submitted applications across Challenge Tracks"}
+### Distribution of submitted applications across Challenge Tracks
+tab2 <- categorical_inferential_table(df = df_clean_application_unique_final
+                                      , by_vars = "innovation_challenge_track"
+                                      , include_vars = c("country_of_citizenship", "region", "language")
+                                      , overall = FALSE
+                                      , percent = "row"
+                                      , flex_table = FALSE
+                                      , foot_note = "n (%); row-wise"
+                                      , p_value = FALSE
+                                      )[[1]]
+
+tab2 %>%
+  gtsummary::as_flex_table()
+
+```
+
+Country level patterns showed that in Nigeria, `r inline_text(tab2, variable = country_of_citizenship, level = "Nigeria", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "{p}%")` of applications were submitted under Track II compared to `r inline_text(tab2, variable = country_of_citizenship, level = "Nigeria", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "{p}%")` under Track I, while in Kenya, `r inline_text(tab2, variable = country_of_citizenship, level = "Kenya", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "{p}%")` of submissions were directed to Track II and `r inline_text(tab2, variable = country_of_citizenship, level = "Kenya", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "{p}%")` to Track I. Similar patterns favoring Track II submissions were observed in Ethiopia `r inline_text(tab2, variable = country_of_citizenship, level = "Ethiopia", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "({p}%)")`, Ghana `r inline_text(tab2, variable = country_of_citizenship, level = "Ghana", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "({p}%)")`, and Mozambique `r inline_text(tab2, variable = country_of_citizenship, level = "Mozambique", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "({p}%)")`. Conversely, some countries showed stronger representation in Track I, including the Democratic Republic of Congo `r inline_text(tab2, variable = country_of_citizenship, level = "Democratic Republic of Congo", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, Zambia `r inline_text(tab2, variable = country_of_citizenship, level = "Zambia", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, Benin `r inline_text(tab2, variable = country_of_citizenship, level = "Benin", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, Cameroon `r inline_text(tab2, variable = country_of_citizenship, level = "Cameroon", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, Malawi `r inline_text(tab2, variable = country_of_citizenship, level = "Malawi", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, Uganda `r inline_text(tab2, variable = country_of_citizenship, level = "Uganda", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, and Zimbabwe `r inline_text(tab2, variable = country_of_citizenship, level = "Zimbabwe", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`.
+
+Regional patterns showed that Western Africa and Eastern Africa demonstrated a modest preference for Track II, accounting for `r inline_text(tab2, variable = region, level = "Western Africa", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "{p}%")` and `r inline_text(tab2, variable = region, level = "Eastern Africa", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "{p}%")` of submissions, respectively. In contrast, Central Africa showed greater representation in Track I `r inline_text(tab2, variable = region, level = "Central Africa", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, while Southern Africa exhibited an almost equal distribution between the two tracks.
+
+By language of communication, English-speaking applicants were slightly more represented in Track II `r inline_text(tab2, variable = language, level = "English", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "({p}%)")`. French-speaking applicants showed the opposite pattern, with a higher proportion of applications submitted to Track I `r inline_text(tab2, variable = language, level = "French", column = "Track I: Access to Comprehensive\n Early Pregnancy Loss Care", pattern = "({p}%)")`, while Portuguese-speaking submissions were limited in number but more in Track II `r inline_text(tab2, variable = language, level = "Portuguese", column = "Track II: Empowering Informed\n Decision-Making for Contraception", pattern = "({p}%)")`.
+
+
+# **Screening**
+
+The selection process involved an initial screening to ensure that all applications fully satisfy the inclusion criteria mentioned in the call before proceeding to a more detailed evaluation of the statement of interest.
+
+## Initial Screening
+
+The initial screening of submitted applications was conducted between `r format(as.Date("04/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` and `r format(as.Date("05/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` based on predefined eligibility criteria. These included: (i) team formation consisting of 3–6 members, (ii) inclusion of at least two female members per team, (iii) multidisciplinary team composition, requiring at least one health worker and at least one member with knowledge or experience in machine learning, data science, or software development, and (iv) submission of a statement of interest.
+
+From the `r nrow(df_raw_initial_criteria)` applications, `r sum(df_raw_initial_criteria$status_initial_screening %in% c("Failed"), na.rm = TRUE)` did not meet the eligibility requirements and were therefore excluded. The remaining `r sum(df_raw_initial_criteria$status_initial_screening %in% c("Passed"), na.rm = TRUE)` applications satisfied the initial screening criteria and progressed to the next phase involving evaluation of the statements of interest.
+
+```{r, tab.cap = "Table 3: Number of included initial screening criteria applications across Challenge Tracks"}
+### Number of included initial screening criteria applications across Challenge Tracks
+tab3 <- categorical_inferential_table(df = df_raw_initial_criteria %>%
+                                        dplyr::filter(status_initial_screening %in% c("Passed")
+                                                      ) %>%
+                                        dplyr::select(application_no) %>%
+                                        dplyr::left_join(df_clean_application_unique_final %>%
+                                                           dplyr::select(application_no, innovation_challenge_track,
+                                                                         country_of_citizenship, region,
+                                                                         language)
+                                                         , by = c("application_no")
+                                                         )
+                                      , by_vars = "innovation_challenge_track"
+                                      , include_vars = c("country_of_citizenship", "region", "language")
+                                      , overall = FALSE
+                                      , percent = "column"
+                                      , flex_table = FALSE
+                                      , statistic_categorical = "{n}" #"{n} ({p}%)"
+                                      , foot_note = "n"
+                                      , p_value = FALSE
+                                      )[[1]]
+
+tab3 %>%
+  gtsummary::as_flex_table()
+
+```
+
+
+## Statement of Interest Screening
+
+The statement of interest (SOI) screening was done between `r format(as.Date("06/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` and `r format(as.Date("07/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` and involved (i) verification that the statement of interest did not exceed the maximum limit of 300 words, (ii) evaluation of whether the team had an existing prototype, and (iii) assessment of the technical and conceptual soundness of the proposed idea or solution.
+
+From the `r nrow(df_raw_soi_criteria)` applications that passed the initial screening criteria, `r sum(df_raw_soi_criteria$already_have_a_prototype %in% c("yes"), na.rm = TRUE)` were excluded because the teams had already developed a working prototype. As the innovation challenge targeted early-stage ideas and solutions, only applications without an existing prototype were eligible to proceed. Consequently, `r sum(!df_raw_soi_criteria$already_have_a_prototype %in% c("yes"), na.rm = TRUE)` applications advanced to the SOI evaluation stage.
+
+To ensure a fair, transparent, and consistent assessment process across all applications, a standardized evaluation rubric was developed and utilized by all reviewers during the SOI evaluation stage. The rubric provided uniform assessment across five criteria, enabling objective scoring and comparability of applications across the two innovation challenge tracks.
+
+Table 4 presents the evaluation criteria and the corresponding weights assigned to each criterion within the assessment rubric. The weighting system was designed to reflect the relative importance of each evaluation domain, with a cumulative weighted score totaling to 100%.
+
+
+```{r, tab.cap = "Table 4: Statement of Interest Evaluation Criteria"}
+### Statement of Interest Evaluation Criteria
+tab4 <- df_raw_soi_evaluation_criteria
+
+tab4 %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  )
+```
+
+<br><br>
+
+All criteria were scored on a 4-point performance scale as shown in Table 5.
+
+```{r, tab.cap = "Table 5: Statement of Interest Scoring Scale"}
+### Statement of Interest Scoring Scale
+tab5 <- df_raw_soi_scoring_scale
+
+tab5 %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  )
+```
+
+
+After scoring all criteria, the raw scores (1–4) were then multiplied by the weighting factor to obtain the weighted score, and then summed up to obtain the final score out of 100. Table 6 presents the weighting score summary.
+
+```{r, tab.cap = "Table 6: Weighted Score Summary Sheet"}
+### Weighted Score Summary Sheet
+tab6 <- df_raw_soi_weight_scoring_summary
+
+tab6 %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  ) %>%
+  flextable::colformat_char(na_str = "") %>%
+  flextable::colformat_double(na_str = "")
+
+```
+
+<br><br>
+
+The SOIs from the final `r sum(!df_raw_soi_criteria$already_have_a_prototype %in% c("yes"), na.rm = TRUE)` applications were evaluated by `r length(unique(df_raw_soi_reviewers$person))` reviewers, comprising `r length(unique(df_raw_soi_reviewers$person[df_raw_soi_reviewers$organization %in% c("APHRC")]))` from APHRC and `r length(unique(df_raw_soi_reviewers$person[df_raw_soi_reviewers$organization %in% c("IDI")]))` from IDI. Review responsibilities were allocated by country: APHRC reviewers evaluated `r length(df_raw_soi_criteria$country[!df_raw_soi_criteria$already_have_a_prototype %in% c("yes") & df_raw_soi_criteria$country %in% df_raw_soi_reviewers$country[df_raw_soi_reviewers$organization %in% c("APHRC")] ])` SOIs from `r paste0(df_raw_soi_reviewers$country[df_raw_soi_reviewers$organization %in% c("APHRC")], collapse = ", ")`, while IDI evaluated `r nrow(df_raw_soi_criteria[!df_raw_soi_criteria$already_have_a_prototype %in% c("yes") & df_raw_soi_criteria$country %in% df_raw_soi_reviewers$country[df_raw_soi_reviewers$organization %in% c("IDI")], ])` SOIs from `r paste0(df_raw_soi_reviewers$country[df_raw_soi_reviewers$organization %in% c("IDI")], collapse = ", ")`.
+
+After completing the evaluation, total weighted scores (out of 100) were ranked from highest to lowest within each track, **with a pass mark set at 80 to ensure inclusion of high-quality teams**. Tables 7a and 7b present the shortlisted teams per Track.
+
+```{r, tab.cap = "Table 7a: Statement of Interest Shortlist for Track I: Access to Comprehensive Early Pregnancy Loss Care"}
+### Statement of Interest Shortlist for Track I: Access to Comprehensive Early Pregnancy Loss Care
+tab7a <- df_raw_soi_criteria %>%
+  dplyr::arrange(-total_score_out_of_100) %>%
+  dplyr::filter(!already_have_a_prototype %in% c("yes"), total_score_out_of_100 >= 80
+                , innovation_challenge_track %in% c("Track I: Access to Comprehensive Early Pregnancy Loss Care")
+                ) %>%
+  dplyr::select(application_no, team_id, total_score_out_of_100) %>%
+  dplyr::left_join(df_clean_application_unique_final %>%
+                     dplyr::select(application_no, country_of_citizenship, region,
+                                   language)
+                   , by = c("application_no")
+                   ) %>%
+  dplyr::select(-application_no)
+
+tab7a %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  ) %>%
+  flextable::colformat_char(na_str = "") %>%
+  flextable::colformat_double(na_str = "")
+
+```
+
+<br><br>
+
+```{r, tab.cap = "Table 7b: Statement of Interest Shortlist for Track II: Empowering Informed Decision-Making for Contraception"}
+### Statement of Interest Shortlist for Track II: Empowering Informed Decision-Making for Contraception
+tab7b <- df_raw_soi_criteria %>%
+  dplyr::arrange(-total_score_out_of_100) %>%
+  dplyr::filter(!already_have_a_prototype %in% c("yes"), total_score_out_of_100 >= 80
+                , innovation_challenge_track %in% c("Track II: Empowering Informed Decision-Making for Contraception")
+                ) %>%
+  dplyr::select(application_no, team_id, total_score_out_of_100) %>%
+  dplyr::left_join(df_clean_application_unique_final %>%
+                     dplyr::select(application_no, country_of_citizenship, region,
+                                   language)
+                   , by = c("application_no")
+                   ) %>%
+  dplyr::select(-application_no)
+
+tab7b %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  ) %>%
+  flextable::colformat_char(na_str = "") %>%
+  flextable::colformat_double(na_str = "")
+
+```
+
+\newpage
+
+# **Selection**
+
+## Final Cohort
+
+It was decided that the final cohort would include **`r nrow(df_raw_soi_final_teams)` teams (10 per track)**. The final selection was balanced across language (English, French, and Portuguese) and geographic region (East Africa, Southern Africa, Central Africa, and West Africa) to ensure regional and linguistic diversity. Tables 8a and 8b present the final selected teams per Track.
+
+```{r, tab.cap = "Table 8a: Final Teams for Track I: Access to Comprehensive Early Pregnancy Loss Care"}
+### Final Teams for Track I: Access to Comprehensive Early Pregnancy Loss Care
+tab8a <- df_raw_soi_criteria %>%
+  dplyr::arrange(-total_score_out_of_100) %>%
+  dplyr::filter(innovation_challenge_track %in% c("Track I: Access to Comprehensive Early Pregnancy Loss Care")
+                ,team_id %in% df_raw_soi_final_teams$team_id
+                ) %>%
+  dplyr::select(application_no, team_id) %>%
+  dplyr::left_join(df_clean_application_unique_final %>%
+                     dplyr::select(application_no, country_of_citizenship, region,
+                                   language)
+                   , by = c("application_no")
+                   ) %>%
+  dplyr::select(-application_no)
+
+tab8a %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  ) %>%
+  flextable::colformat_char(na_str = "") %>%
+  flextable::colformat_double(na_str = "")
+
+```
+
+<br><br>
+
+```{r, tab.cap = "Table 8b: Final Teams for Track II: Empowering Informed Decision-Making for Contraception"}
+### Final Teams for Track II: Empowering Informed Decision-Making for Contraception
+tab8b <- df_raw_soi_criteria %>%
+  dplyr::arrange(-total_score_out_of_100) %>%
+  dplyr::filter(innovation_challenge_track %in% c("Track II: Empowering Informed Decision-Making for Contraception")
+                ,team_id %in% df_raw_soi_final_teams$team_id
+                ) %>%
+  dplyr::select(application_no, team_id) %>%
+  dplyr::left_join(df_clean_application_unique_final %>%
+                     dplyr::select(application_no, country_of_citizenship, region,
+                                   language)
+                   , by = c("application_no")
+                   ) %>%
+  dplyr::select(-application_no)
+
+tab8b %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 15
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  ) %>%
+  flextable::colformat_char(na_str = "") %>%
+  flextable::colformat_double(na_str = "")
+
+```
+
+<br><br>
+
+Table 9 presents the distribution of the final selected teams across the two innovation challenge tracks by country, African regions, and language of communication.
+
+```{r, tab.cap = "Table 9: Distribution of the final selected teams across Challenge Tracks"}
+### Distribution of final selected cohort across Challenge Tracks
+tab9 <- categorical_inferential_table(df = df_raw_soi_criteria %>%
+                                        dplyr::filter(team_id %in% df_raw_soi_final_teams$team_id
+                                                      ) %>%
+                                        dplyr::select(application_no) %>%
+                                        dplyr::left_join(df_clean_application_unique_final %>%
+                                                           dplyr::select(application_no, innovation_challenge_track,
+                                                                         country_of_citizenship, region,
+                                                                         language)
+                                                         , by = c("application_no")
+                                                         ) %>%
+                                        dplyr::mutate(across(where(is.factor),  ~forcats::fct_drop(.x )
+                                                             ) #drop unused factor levels
+                                                      )
+                                      , by_vars = "innovation_challenge_track"
+                                      , include_vars = c("country_of_citizenship", "region", "language")
+                                      , overall = FALSE
+                                      , percent = "column"
+                                      , flex_table = FALSE
+                                      , statistic_categorical = "{n} ({p}%)"
+                                      , foot_note = "n (%)"
+                                      , p_value = FALSE
+                                      )[[1]]
+
+tab9 %>%
+  gtsummary::as_flex_table()
+
+```
+
+
+## Communication to final teams
+
+Communication to the **`r nrow(df_raw_soi_final_teams)` final selected teams** was conducted via formal email notifications sent to the team leads on `r format(as.Date("08/05/2026", format = "%d/%m/%Y"),"%d %B %Y")`. The email informed applicants of their successful selection into the AI for Reproductive Health in Sub-Saharan Africa Innovation Challenge and specified the track under which they were selected. It highlighted the key evaluation criteria that informed selection and acknowledged the competitive nature of the application process. 
+
+The communication also included clear administrative instructions requiring teams to confirm their participation by `r format(as.POSIXct(paste(as.Date("09/05/2026", format = "%d/%m/%Y"), "14:00:00"), tz = "Africa/Nairobi"), "%d %B %Y %H:%M:%S %Z")`, with a note that failure to respond would result in forfeiture of their place. In addition, selected teams were informed of a compulsory capacity-building webinar scheduled on `r format(as.Date("11/05/2026", format = "%d/%m/%Y"),"%d %B %Y")`, and its importance for preparing teams for the innovation sprint.
+
+Out of the **`r nrow(df_raw_soi_final_teams)` final selected teams** that received selection notifications, **`r sum(df_raw_soi_final_teams$confirmed %in% c("yes"), na.rm = TRUE)` teams** formally confirmed their participation within the stipulated timeline and were subsequently enrolled in the innovation challenge. The **`r sum(df_raw_soi_final_teams$confirmed %in% c("yes"), na.rm = TRUE)` teams** had a total of **`r sum(df_clean_application_selection_teams$confirmed %in% c("yes"), na.rm = TRUE)` members**. 
+
+Table 10 presents the distribution of the final teams that confirmed their participation across the two innovation challenge tracks by country, African regions, and language of communication.
+
+
+```{r, tab.cap = "Table 10: Distribution of teams that confirmed participation across Challenge Tracks"}
+### Distribution of teams that confirmed participation across Challenge Tracks
+tab10 <- categorical_inferential_table(df = df_raw_soi_criteria %>%
+                                        dplyr::filter(team_id %in% df_raw_soi_final_teams$team_id[df_raw_soi_final_teams$confirmed %in% c("yes")]
+                                                      ) %>%
+                                        dplyr::select(application_no) %>%
+                                        dplyr::left_join(df_clean_application_unique_final %>%
+                                                           dplyr::select(application_no, innovation_challenge_track,
+                                                                         country_of_citizenship, region,
+                                                                         language)
+                                                         , by = c("application_no")
+                                                         ) %>%
+                                        dplyr::mutate(across(where(is.factor),  ~forcats::fct_drop(.x )
+                                                             ) #drop unused factor levels
+                                                      )
+                                      , by_vars = "innovation_challenge_track"
+                                      , include_vars = c("country_of_citizenship", "region", "language")
+                                      , overall = FALSE
+                                      , percent = "column"
+                                      , flex_table = FALSE
+                                      , statistic_categorical = "{n} ({p}%)"
+                                      , foot_note = "n (%)"
+                                      , p_value = FALSE
+                                      )[[1]]
+
+tab10 %>%
+  gtsummary::as_flex_table()
+
+```
+
+## Communication to unsuccessful teams
+
+Communication to unsuccessful applicants was also conducted through formal email notifications sent to the respective team leads on `r format(as.Date("11/05/2026", format = "%d/%m/%Y"),"%d %B %Y")`. The email thanked teams for their interest and effort in applying to the AI for Reproductive Health in Sub-Saharan Africa Innovation Challenge and informed them that they had not been selected following a competitive review process. 
+
+The communication outlined the evaluation criteria used during assessment and acknowledged the high quality of submissions received. Importantly, the message encouraged teams to continue pursuing future innovation challenges and emphasized that the outcome should not diminish their potential, and invited them to remain engaged with future opportunities and initiatives under the **HASH (Hub for Artificial Intelligence in Maternal, Sexual and Reproductive Health) network**.
+
+\newpage
+
+# **Appendix** {-}
+
+## A. Country Information Tables {.unnumbered}
+
+```{r, tab.cap = "Table A1: Countries Distributed by Region"}
+
+sapply(levels(df_clean_application_unique_final$region), function(x) {
+  nn <- x
+  df <- df_clean_application_unique_final %>%
+    dplyr::filter(region == nn) %>%
+    dplyr::select(country_of_citizenship) %>%
+    dplyr::mutate(country_of_citizenship = stringr::str_to_title(country_of_citizenship)) %>%
+    dplyr::distinct() %>%
+    dplyr::arrange(country_of_citizenship) %>%
+    dplyr::pull()
+  
+  out <- data.frame(Region = nn, 
+                    Country = paste(df, collapse = ", ")
+                    )
+  
+}, simplify = FALSE
+) %>%
+  dplyr::bind_rows() %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 10
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  )
+
+```
+
+<br><br>
+
+```{r, tab.cap = "Table A2: Countries Distributed by Language"}
+
+sapply(levels(df_clean_application_unique_final$language), function(x) {
+  nn <- x
+  df <- df_clean_application_unique_final %>%
+    dplyr::filter(language == nn) %>%
+    dplyr::select(country_of_citizenship) %>%
+    dplyr::mutate(country_of_citizenship = stringr::str_to_title(country_of_citizenship)) %>%
+    dplyr::distinct() %>%
+    dplyr::arrange(country_of_citizenship) %>%
+    dplyr::pull()
+  
+  out <- data.frame(Language = nn, 
+                    Country = paste(df, collapse = ", ")
+                    )
+  
+}, simplify = FALSE
+) %>%
+  dplyr::bind_rows() %>%
+  flextable::as_flextable(show_coltype = FALSE
+                          , max_row = 10
+                          , short_strings = FALSE
+                          ) %>%
+  #flextable::autofit() %>%
+  flextable::fit_to_width(max_width = 8) %>%
+  flextable::set_table_properties(layout = 'autofit'
+                                  , align = 'center'
+                                  )
+
+```
+
+
+
+
+

@@ -1,0 +1,440 @@
+---
+title: "AI FOR REPRODUCTIVE HEALTH IN SUB-SAHARAN AFRICA INNOVATION CHALLENGE"
+subtitle: "Capacity Building Report"
+author: "APHRC"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, results="hide", include=FALSE}
+
+## Set Chunk requirements
+knitr::opts_chunk$set(#include = TRUE,
+                      echo=FALSE, message = FALSE, warning = FALSE, dpi = 300,
+                      fig.height=8.5, fig.width=10.5, out.height="110%", out.width="100%"
+                      )
+
+```
+
+```{r setting working directory, include=FALSE, results = "hide"}
+
+## Setting work directory
+
+working_directory <- base::getwd()
+
+ggtheme_descriptive_plot()
+
+```
+
+\newpage
+
+# **Overview**
+
+## Background
+
+The **AI FOR REPRODUCTIVE HEALTH IN SUB-SAHARAN AFRICA INNOVATION CHALLENGE** aims to harness the power of Artificial Intelligence (AI) to address critical challenges in maternal, sexual, and reproductive health (MSRH) across Africa. Through the innovation challenge, multidisciplinary teams of health professionals, technologists, and innovators will collaborate to co-create ethical, inclusive, and scalable AI-driven solutions with real-world impact across two challenge tracks:  **Empowering Informed Contraceptive Choices** and **Early Pregnancy Loss Care**.
+
+As part of the Innovation Challenge, a needs assessment survey was conducted to identify the capacity-strengthening requirements of participating teams and innovators. The survey aimed to generate insights that would enable the **African Population and Health Research Center (APHRC)** and the **Infectious Diseases Institute (IDI)** to design and optimize targeted capacity-building initiatives that support the development, implementation, and scaling of AI-driven reproductive health solutions. Findings from the survey informed the planning of capacity-building sessions focused on technical, operational, and innovation-related competencies required by participants. In addition, a check-in session was incorporated into the program to monitor progress, address emerging challenges, and foster peer learning and collaboration among participating teams throughout the innovation challenge.
+
+## Summary
+
+The African Population and Health Research Center (APHRC) conducted an extensive survey from `r format(min(df_clean_capacity_building_final$timestamp),"%d %B %Y")` to `r format(max(df_clean_capacity_building_final$timestamp),"%d %B %Y")` to comprehensively assess participants' knowledge, skill levels, and capacity-building interests. Through the online questionnaire, the survey garnered insights from `r nrow(df_clean_capacity_building_final)` participants.
+
+Key findings include:
+
+* Strong orientation toward AI-centric innovation, with most respondents aiming to integrate artificial intelligence into practical, user-facing applications rather than standalone analytical systems.
+* Requirement of multidimensional capacity building support spanning technical AI competencies, health domain knowledge, innovation development, ethical considerations, and pitch/communication skills.
+
+## Analysis
+
+The survey data were imported into R version 4.5.0 (R Core Team, 2025) for data cleaning and analysis. Descriptive statistics, including frequencies and percentages, were used to summarize socio-demographic characteristics, areas of expertise, technical skills of participants, identified capacity strengthening needs, and types of solution development. Open-ended responses were reviewed and grouped into key thematic areas to identify common priorities and recommendations regarding the skills participants expected to gain from the innovation challenge, the anticipated impact of proposed solutions on MSRH, expectations from the innovation challenge, and the types of additional support required to facilitate effective participation.
+
+\newpage
+
+# **Needs Assessment Survey**
+
+## Response rate
+
+The survey was conducted through an online questionnaire between `r format(min(df_clean_capacity_building_final$timestamp),"%d %B %Y")` and `r format(max(df_clean_capacity_building_final$timestamp),"%d %B %Y")`. The questionnaire was distributed to `r nrow(df_clean_information_webinar) + sum(df_clean_application$capacity_building_email_received %in% c("yes"), na.rm = TRUE)` participants via email. A total of `r nrow(df_clean_capacity_building_final)` respondents completed the questionnaire, yielding a response rate of `r round(100 * nrow(df_clean_capacity_building_final) / (nrow(df_clean_information_webinar) + sum(df_clean_application$capacity_building_email_received %in% c("yes"), na.rm = TRUE)), 1)`%.
+
+## Study population characteristics
+
+### Demographics
+
+Table 1 presents the demographic characteristics of respondents who participated in the survey.
+
+```{r, tab.cap = "Table 1: Demographics of respondents"}
+
+tab_1 <- descriptive_table(df = df_clean_capacity_building_final
+                          , include_vars = c("gender", "age", "age_group", "highest_level_of_education")
+                          , mean_vars = c("age")
+                          , flex_table = FALSE
+                          , foot_note = "n (%)"
+                          ) 
+
+tab_1 %>%
+  gtsummary::as_flex_table()
+
+```
+
+Females constituted slightly more than half of the respondents `r inline_text(tab_1, variable = gender, level = "Female", pattern = "({p})%")`, while males accounted for `r inline_text(tab_1, variable = gender, level = "Male", pattern = "({p})%")`. The mean age of respondents was `r inline_text(tab_1, variable = age, pattern = "{mean}")` years `r inline_text(tab_1, variable = age, pattern = "(SD: {sd})")`, with a median age of `r inline_text(tab_1, variable = age, pattern = "{median}")` years `r inline_text(tab_1, variable = age, pattern = "(IQR: {p25}, {p75} years)")`. Most respondents were aged 25–34 years `r inline_text(tab_1, variable = age_group, level = "25-34", pattern = "({p})%")`, followed by those aged 18–24 years `r inline_text(tab_1, variable = age_group, level = "18-24", pattern = "({p})%")`.
+
+Regarding the highest educational attainment, the majority of respondents had a Bachelor’s degree `r inline_text(tab_1, variable = highest_level_of_education, level = "Bachelors", pattern = "({p})%")`, followed by a Master’s degree `r inline_text(tab_1, variable = highest_level_of_education, level = "Masters", pattern = "({p})%")`. Smaller proportions reported having a postgraduate diploma `r inline_text(tab_1, variable = highest_level_of_education, level = "Post graduate Diploma", pattern = "({p})%")`, PhD `r inline_text(tab_1, variable = highest_level_of_education, level = "PhD", pattern = "({p})%")`, professional certificate `r inline_text(tab_1, variable = highest_level_of_education, level = "Professional Certificate", pattern = "({p})%")`, high school education `r inline_text(tab_1, variable = highest_level_of_education, level = "High School", pattern = "({p})%")`, or A-level education `r inline_text(tab_1, variable = highest_level_of_education, level = "A levels", pattern = "({p})%")`.
+
+### Current Occupation
+
+Figure 1 displays the respondents' diverse multidisciplinary professional backgrounds. Students constituted the largest proportion of respondents, accounting for `r paste0(round(mean(df_clean_capacity_building_final$current_occupation %in% c("Student"), na.rm = TRUE)*100, 1), "%")` of the participants. This high level of student participation demonstrates strong interest among emerging and early-career innovators in applying artificial intelligence and digital technologies to address reproductive health challenges.
+
+```{r, fig.cap = "Figure 1: Current Occupation"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### 5. Current Occupation (e.g Student, Data manager, Data Scientist...etc)
+simple_plot(df = df_clean_capacity_building_final
+            , variable = "current_occupation"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.2)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+
+
+```
+
+Among Data & IT professionals, Data Analysts and Data Scientists represented the largest category, with `r paste0(round(mean(df_clean_capacity_building_final$current_occupation %in% c("Data Analyst/Scientist"), na.rm = TRUE)*100, 1), "%")`, followed by Software Developers/Engineers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Software Developer/Engineer"), na.rm = TRUE)*100, 1), "%", ")")`, ML/AI Engineers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("ML/AI Engineer"), na.rm = TRUE)*100, 1), "%", ")")`, and IT specialists `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Information Technology"), na.rm = TRUE)*100, 1), "%", ")")`. This indicates substantial representation from technical disciplines that are critical for the development of AI-driven solutions. Healthcare professionals were also well represented, including Nurses and Midwives `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Nurse/Midwife"), na.rm = TRUE)*100, 1), "%", ")")`, Public Health Experts `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Public health expert"), na.rm = TRUE)*100, 1), "%", ")")`, Medical Practitioners `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Medical Practitioner"), na.rm = TRUE)*100, 1), "%", ")")`, Clinical Officers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Clinical Officer"), na.rm = TRUE)*100, 1), "%", ")")`, and Pharmacists `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Pharmacist"), na.rm = TRUE)*100, 1), "%", ")")`. The participation of Healthcare professionals highlights the strong linkage between technological innovation and healthcare service delivery within the challenge.
+
+Research-oriented professionals also formed an important segment of respondents, with Researchers accounting for `r paste0(round(mean(df_clean_capacity_building_final$current_occupation %in% c("Researcher"), na.rm = TRUE)*100, 1), "%")`. Data Managers contributed `r paste0(round(mean(df_clean_capacity_building_final$current_occupation %in% c("Data Manager"), na.rm = TRUE)*100, 1), "%")` of the respondents, further strengthening the data management and analytics capacity represented within the cohort. Management and administrative professionals were also represented, including Project Officers and Managers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Project Officer/Manager"), na.rm = TRUE)*100, 1), "%", ")")`, Management professionals `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Management"), na.rm = TRUE)*100, 1), "%", ")")`, Communication Officers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Communication Officer"), na.rm = TRUE)*100, 1), "%", ")")`, Finance Officers `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Finance Officer"), na.rm = TRUE)*100, 1), "%", ")")`, and Monitoring and Evaluation specialists `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c(" Monitoring and Evaluation (M&E)"), na.rm = TRUE)*100, 1), "%", ")")`. Educational professionals, including Lecturers and Teachers, accounted for `r paste0(round(mean(df_clean_capacity_building_final$current_occupation %in% c("Lecturer/Teacher"), na.rm = TRUE)*100, 1), "%")` of the respondents. A small proportion of respondents reported being unemployed `r paste0("(",round(mean(df_clean_capacity_building_final$current_occupation %in% c("Not Employed"), na.rm = TRUE)*100, 1), "%", ")")`.
+
+The occupational profile of respondents demonstrates a balanced mix of technical, health, research, academic, and management expertise. The strong representation of students, data professionals, software developers, and healthcare practitioners suggests that participants possess complementary skills necessary for developing innovative, evidence-based, and scalable AI solutions for reproductive health challenges across Africa. This diversity also underscores the importance of multidisciplinary collaboration, as successful solution development often requires the combined expertise of data scientists, software developers, health professionals, and domain experts.
+
+### Language of communication
+
+The preferred language of communication among respondents was predominantly English, reported by `r paste0(round(mean(df_clean_capacity_building_final$preferred_language_of_communication %in% c("English"), na.rm = TRUE)*100, 1), "%")` of participants. French was preferred by `r paste0(round(mean(df_clean_capacity_building_final$preferred_language_of_communication %in% c("French"), na.rm = TRUE)*100, 1), "%")` of respondents, while Portuguese was reported by `r paste0(round(mean(df_clean_capacity_building_final$preferred_language_of_communication %in% c("Portuguese"), na.rm = TRUE)*100, 1), "%")` of participants.
+
+```{r, fig.cap = "Figure 2: Preferred language of communication"}
+### Preferred language of communication
+ggtheme_descriptive_plot()
+simple_piefun(df_clean_capacity_building_final
+              , "preferred_language_of_communication"
+              , col_values=c(GREEN3, BLUE3, RED3)
+              , donut_label_size = 9
+              , pie_label_size = 6
+              ) 
+```
+
+\newpage
+
+### Country and Region
+
+Nigeria recorded the highest survey participation `r paste0("(",round(mean(df_clean_capacity_building_final$country_of_citizenship %in% c("Nigeria"), na.rm = TRUE)*100, 1), "%", ")")`, followed closely by Kenya `r paste0("(",round(mean(df_clean_capacity_building_final$country_of_citizenship %in% c("Kenya"), na.rm = TRUE)*100, 1), "%", ")")`. Uganda contributed `r paste0(round(mean(df_clean_capacity_building_final$country_of_citizenship %in% c("Uganda"), na.rm = TRUE)*100, 1), "%")` of respondents, while Cameroon and Zimbabwe accounted for `r paste0(round(mean(df_clean_capacity_building_final$country_of_citizenship %in% c("Cameroon"), na.rm = TRUE)*100, 1), "%")` and `r paste0(round(mean(df_clean_capacity_building_final$country_of_citizenship %in% c("Zimbabwe"), na.rm = TRUE)*100, 1), "%")`, respectively. Participation from other countries was comparatively lower, with most countries contributing less than 5% each. Overall, the findings indicate that survey engagement was concentrated in a few countries, particularly Nigeria, Kenya, and Uganda, which together represented more than half of all respondents.
+
+```{r, fig.cap = "Figure 3: Response by country"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### 4. Country of Citizenship 
+simple_plot(df = df_clean_capacity_building_final
+            , variable = "country_of_citizenship"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.2)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+
+
+```
+
+\newpage
+
+Survey participation was highest in Eastern Africa, which accounted for `r paste0(round(mean(df_clean_capacity_building_final$region %in% c("Eastern Africa"), na.rm = TRUE)*100, 1), "%")` of the respondents, followed by Western Africa with `r paste0(round(mean(df_clean_capacity_building_final$region %in% c("Western Africa"), na.rm = TRUE)*100, 1), "%")`. Southern Africa contributed `r paste0(round(mean(df_clean_capacity_building_final$region %in% c("Southern Africa"), na.rm = TRUE)*100, 1), "%")`, while Central Africa had the lowest participation `r paste0("(",round(mean(df_clean_capacity_building_final$region %in% c("Central Africa"), na.rm = TRUE)*100, 1), "%", ")")`. These findings indicate that the survey achieved its strongest engagement in Eastern and Western Africa, which together represented over three-quarters `r paste0("(",round(mean(df_clean_capacity_building_final$region %in% c("Eastern Africa", "Western Africa"), na.rm = TRUE)*100, 1), "%", ")")` of all respondents.
+
+```{r, fig.cap = "Figure 4: Response by region"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### Distribution of submitted applications by region
+simple_plot(df = df_clean_capacity_building_final
+            , variable = "region"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.2)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+```
+
+
+## Area of Expertise
+
+Figure 5 displays the respondents' diverse multidisciplinary backgrounds relevant to the AI and reproductive health innovation challenge. 
+
+The most commonly reported area of expertise was Maternal, Sexual and Reproductive Health (MSRH), represented by 50.4% of the participants, followed by Data Science/Artificial Intelligence/Machine Learning with 46.6%. Research and Public Health expertise were also highly represented, reported by 43.5% and 41.7% of participants, respectively. In addition, 30.9% of participants reported expertise in Software Development, while fewer reported expertise in Product Management (15.8%) and UX/UI Design (13.8%). 
+
+These findings demonstrate the multidisciplinary nature of the innovation challenge application cohort, bringing together technical, clinical, research, and product development expertise to address MSRH challenges in Sub-Saharan Africa.
+
+```{r, fig.cap = "Figure 5: What is your primary area of expertise?"}
+### 8. What is your primary area of expertise? 
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+multires_sep_count_plot(df_clean_capacity_building_final
+                        , c("primary_area_of_expertise_1", "primary_area_of_expertise_2"
+                            , "primary_area_of_expertise_3", "primary_area_of_expertise_4"
+                            , "primary_area_of_expertise_5", "primary_area_of_expertise_6"
+                            )
+                        , expand_yaxis = c(0.0,0.12)
+                        , bar_fill_colour = GREEN3
+                        , text_label_size = 3.6
+                        , x_axis_label_wrap_width = 30
+                        )
+
+```
+
+<br><br>
+
+According to self-rated knowledge of MSRH topics as shown in Figure 6, most respondents reported an intermediate level of knowledge `r paste0("(",round(mean(df_clean_capacity_building_final$rate_your_knowledge_of_msrh_topics %in% c("Intermediate"), na.rm = TRUE)*100, 1), "%", ")")`. This is followed by those who consider themselves advanced `r paste0("(",round(mean(df_clean_capacity_building_final$rate_your_knowledge_of_msrh_topics %in% c("Advanced"), na.rm = TRUE)*100, 1), "%", ")")`, while a smaller proportion identify as beginners `r paste0("(",round(mean(df_clean_capacity_building_final$rate_your_knowledge_of_msrh_topics %in% c("Beginner"), na.rm = TRUE)*100, 1), "%", ")")`.
+
+```{r, fig.cap = "Figure 6: How would you rate your knowledge of MSRH topics?"}
+### 9. How would you rate your knowledge of MSRH topics?
+simple_piefun(df_clean_capacity_building_final
+              , "rate_your_knowledge_of_msrh_topics"
+              , col_values=c(GREEN3, BLUE3, RED3)
+              , donut_label_size = 9
+              , pie_label_size = 6
+              ) 
+```
+
+
+## Technical & Digital Skills
+
+Figure 7 displays varying levels of technical proficiency among respondents across seven key digital and software development domains.
+
+Overall, respondents reported the strongest competency in data analysis and visualization, which had the lowest proportion of respondents with no experience (7.6%) and the highest combined proportion of proficient, intermediate, and advanced users (57%). Programming skills also showed relatively strong capacity, with 23.0% of respondents identifying as proficient, indicating a solid foundational technical base within the cohort.
+
+In contrast, notable skill gaps were observed in more specialized technical areas. UI/UX design recorded the highest proportion of respondents with no experience (36.0%), followed by version control systems such as Git (32.4%) and mobile/web application development (31.1%). These findings suggest that while participants possess strengths in data-oriented competencies, there is comparatively limited exposure to software engineering workflows, collaborative development tools, and user-centered design practices.
+
+Despite these gaps, a smaller but significant group of participants demonstrated advanced expertise in highly technical domains. Version control systems (Git) had the highest proportion of advanced users (11.0%), closely followed by data analysis and visualization (10.8%) and AI/Machine Learning development (10.4%). This pattern indicates the presence of a technically skilled subgroup capable of supporting more advanced innovation and development activities, although broader capacity strengthening is still needed to improve overall technical readiness across the cohort.
+
+```{r, fig.cap = "Figure 7: How would you rate your proficiency in the following areas?"}
+### 10. How would you rate your proficiency in the following areas?
+
+#ggtheme_descriptive_plot()
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12, legendtext_size = 11)
+multires_stack_plot(df_clean_capacity_building_final 
+                    , c("proficiency_in_programming", "proficiency_in_data_analysis_visualization"
+                        , "proficiency_relational_databases", "proficiency_in_version_control_systems"
+                        , "proficiency_in_ai_ml_development", "proficiency_in_mobile_web_app_development"
+                        , "proficiency_in_ui_ux_design"
+                        )
+                    , x_axis_label_wrap_width = 30
+                    , legend_label = ""
+                    , text_label_size = 3.5
+                    , expand_yaxis = c(0.0,0.02)
+                    )
+```
+
+<br><br>
+
+Figure 8 shows that the vast majority of respondents have prior exposure to AI tools. Overall, `r paste0(round(mean(df_clean_capacity_building_final$worked_with_ai_tools_before %in% c("Yes"), na.rm = TRUE)*100, 1), "%")` of respondents reported having previously worked with AI tools, while only `r paste0(round(mean(df_clean_capacity_building_final$worked_with_ai_tools_before %in% c("No"), na.rm = TRUE)*100, 1), "%")`indicated no prior experience.
+
+These results suggest a high level of baseline familiarity with AI technologies across the surveyed cohort, reflecting strong existing interest and engagement in AI-related innovation activities.
+
+```{r, fig.cap = "Figure 8: Have you worked with AI tools before?"}
+### 11. Have you worked with AI tools before?
+simple_piefun(df_clean_capacity_building_final
+              , "worked_with_ai_tools_before"
+              , col_values=c(GREEN3, BLUE3)
+              , donut_label_size = 9
+              , pie_label_size = 6
+              ) 
+```
+
+Respondents reported experience using a wide range of AI tools and platforms across:
+
+* **Large Language Models (LLMs) and Generative AI:** The most frequently mentioned tools are Large Language Models, specifically **Gemini (Google), OpenAI/ChatGPT, and Claude (Anthropic)**. Respondents often use these for research, content development, code generation, idea development, and general productivity.
+* **Development and Predictive Modeling Tools:** Many respondents report using **predictive models and machine learning frameworks like TensorFlow, PyTorch, and Scikit-learn** for building and training models. Tools for development and deployment also include **Jupyter Notebooks and Google Colab**, along with frameworks such as **LangChain and Streamlit**.
+* **Conversational AI:** Numerous individuals have experience with various types of **chatbots and conversational AI systems**, including creating custom chatbots (e.g., WhatsApp chatbots) and using specialized tools like **MyAIFactChecker and KEMI**.
+* **Supporting AI Platforms and Assistants:** Other commonly used tools include AI code assistants like **GitHub Copilot and Microsoft Copilot**, along with specialized research and productivity platforms such as **Perplexity and NotebookLM**.
+
+
+## Capacity Building Needs
+
+### Training/support needs
+
+As highlighted in Figure 9, respondents identified a broad range of capacity strengthening needs during the innovation challenge.
+
+The most highly requested area of support was grant writing and fundraising, selected by 76.6% of the respondents, highlighting the need for skills related to proposal development, resource mobilization, and sustainability planning for innovation projects.
+
+This was followed closely by ethical AI and responsible innovation, which was identified by 71.9% of the respondents. The high level of interest in this area underscores respondents’ recognition of the importance of fairness, accountability, transparency, and responsible deployment of AI solutions, particularly within MSRH contexts.
+
+Substantial demand was also reported for MSRH technical knowledge (65.1%), prototyping and product development (63.5%), and pitching and communication skills (61.9%). These findings suggest that respondents are seeking both domain-specific expertise and practical innovation skills necessary for transforming ideas into scalable and impactful solutions. In addition, more than half of respondents (56.8%) expressed interest in AI/ML fundamentals, indicating continued demand for foundational technical training despite the high baseline familiarity with AI tools observed in the cohort.
+
+Overall, the findings demonstrate that respondents require multidimensional support spanning technical AI competencies, health domain knowledge, innovation development, ethical considerations, and sustainability skills to effectively participate in and benefit from the innovation challenge.
+
+```{r, fig.cap = "Figure 9: Which areas would you like training/support in during the innovation challenge?"}
+### 13. Which areas would you like training/support in during the innovation challenge?
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+multires_sep_count_plot(df_clean_capacity_building_final
+                        , c("which_areas_would_you_like_training_support_1"
+                            , "which_areas_would_you_like_training_support_2"
+                            , "which_areas_would_you_like_training_support_3"
+                            , "which_areas_would_you_like_training_support_4"
+                            , "which_areas_would_you_like_training_support_5"
+                            , "which_areas_would_you_like_training_support_6"
+                            )
+                        , expand_yaxis = c(0.0,0.12)
+                        , bar_fill_colour = GREEN3
+                        , text_label_size = 3.6
+                        , x_axis_label_wrap_width = 25
+                        )
+
+```
+
+
+### Skills to be gained
+
+Respondents hoped to gain several specific skills in this innovation challenge related to:
+
+* **AI/Machine Learning and Data Application:** The most frequently cited desire is to gain practical skills in applying AI/ML fundamentals, including data analysis, model development, predictive modeling, and data-driven decision-making, specifically for real-world maternal, sexual, and reproductive health (MSRH) challenges in low-resource settings.
+* **Ethical AI and Responsible Innovation:** Participants consistently aim to strengthen their knowledge and skills in ethical AI, responsible innovation, data governance, privacy, bias mitigation, and designing culturally sensitive, inclusive, and equitable AI solutions for vulnerable populations.
+* **Product Development and Prototyping:** A key goal is to acquire hands-on experience in rapid prototyping, product development, user-centered design, and translating ideas into scalable, functional digital health solutions (e.g., decision-support tools, mobile apps).
+* **Communication, Pitching, and Fundraising:** Many respondents seek to enhance their communication, pitching, and storytelling skills to effectively present technical solutions to diverse stakeholders. They also prioritize gaining capacity in grant writing and fundraising to secure support and ensure the sustainability of their innovative projects.
+* **MSRH Technical Knowledge and Collaboration:** Participants hope to deepen their technical knowledge in MSRH, improve interdisciplinary collaboration skills (working with health professionals and technologists), and learn how to integrate AI solutions into existing health systems for real-world impact.
+
+## Expectations & Goals
+
+### Innovation challenge expectations
+
+Respondents indicated several expectations from this innovation challenge, including:
+
+* **Skill Development and Learning:** The primary expectation is to gain hands-on experience in developing and applying AI/ML solutions to real-world health challenges, particularly in maternal, sexual, and reproductive health (MSRH) in Sub-Saharan Africa. Participants also expect to strengthen technical skills (data analysis, product design, prototyping, ethical AI) and soft skills (pitching, problem-solving, teamwork).
+* **Mentorship and Expert Guidance:** A key expectation is to receive structured, expert mentorship and technical guidance, often from multidisciplinary experts (AI, clinical, public health, ethics), to refine, validate, and stress-test their ideas and prototypes (e.g., against WHO guidelines).
+* **Solution Refinement and Prototyping:** Many participants aim to move their ideas or existing concepts into functional, scalable, and user-centered prototypes or minimum viable products (MVPs). They expect the challenge to provide the framework, resources (including datasets), and feedback necessary to transition these solutions toward real-world deployment and clinical soundness in low-resource settings.
+* **Networking and Collaboration:** Participants highly anticipate collaborating with and learning from peers, innovators, and experts across Africa and different disciplines to build professional networks, secure partnerships, and gain exposure to the broader digital health ecosystem for future collaborations and scaling.
+* **Impact and Sustainability:** A strong underlying goal is to develop innovative solutions that will ultimately create a measurable, positive impact on MSRH outcomes, improve access to care, and position their projects for future implementation, adoption, and long-term funding/sustainability beyond the challenge.
+
+### Solution development
+
+Figure 10 highlights the respondents' preference for innovations for the challenge. 
+
+The most commonly selected solution type was AI-powered solutions, chosen by `r paste0(round(mean(df_clean_capacity_building_final$type_of_solution_to_develop %in% c("AI-powered solution"), na.rm = TRUE)*100, 1), "%")` of the respondents, indicating a clear emphasis on building intelligent systems that leverage machine learning and generative AI capabilities.
+
+Mobile applications were the second most preferred option, selected by `r paste0(round(mean(df_clean_capacity_building_final$type_of_solution_to_develop %in% c("Mobile application"), na.rm = TRUE)*100, 1), "%")` of the respondents, followed by web-based applications with `r paste0(round(mean(df_clean_capacity_building_final$type_of_solution_to_develop %in% c("Web-based application"), na.rm = TRUE)*100, 1), "%")` of the respondents. This suggests that while AI is the dominant focus, many participants also aim to translate their ideas into accessible digital platforms for end users.
+
+Data and analytics tools were the least preferred solution type, selected by `r paste0(round(mean(df_clean_capacity_building_final$type_of_solution_to_develop %in% c("Data/analytics tool"), na.rm = TRUE)*100, 1), "%")` of the respondents. 
+
+Overall, the findings highlight a strong orientation toward AI-centric innovation, with most participants aiming to integrate artificial intelligence into practical, user-facing applications rather than standalone analytical systems.
+
+
+```{r, fig.cap = "Figure 10: What type of solution would you like to develop?"}
+
+ggtheme_descriptive_plot_blank_xaxis(textsize_yaxis=12)
+### 16. What type of solution would you like to develop?
+simple_plot(df = df_clean_capacity_building_final
+            , variable = "type_of_solution_to_develop"
+            , rotate_axis= TRUE
+            , x_axis_label_wrap_width = 30
+            , y_axis_breaks = 5
+            , title_label = ""
+            , expand_yaxis = c(0.0,0.12)
+            , text_label_size = 4
+            , bar_fill_colour = GREEN3
+            )
+```
+
+### Impact your solution will achieve in MSRH
+
+* **Reducing Morbidity and Mortality:** Solutions prominently aim to significantly reduce preventable maternal and neonatal morbidity and mortality, particularly focusing on complications from early pregnancy loss (EPL), obstetric hemorrhage, and unsafe abortions. This is achieved by enabling earlier risk detection, ensuring timely access to life-saving interventions like blood transfusions, and improving overall quality of care.
+* **Improving Access and Equity:** A core objective is improving equitable access to timely, accurate, confidential, and culturally appropriate maternal, sexual, and reproductive health (MSRH) information and services, especially for underserved, remote, low-income, and marginalized populations, including adolescents and young women. This includes addressing geographical, linguistic, and socioeconomic barriers.
+* **Empowering Decision-Making:** Many solutions focus on empowering women and young people to make informed, autonomous decisions regarding their reproductive health, especially concerning contraception. This involves reducing misinformation, addressing stigma, providing personalized guidance tailored to individual health profiles, and improving method satisfaction and continuation rates.
+* **Strengthening Health Systems:** Solutions are designed to strengthen health systems by enhancing clinical decision-making for healthcare providers (nurses, midwives, and community health workers) through AI-powered decision-support tools, streamlining communication, improving referral pathways, and utilizing real-time, data-driven insights for better planning, resource allocation, and targeted interventions.
+
+
+## Additional Information
+
+### Additional Support
+
+Respondents indicated that several additional supports would be essential to enable full participation in the innovation challenge. This included:
+
+* **Mentorship and Technical Guidance:** The most frequently requested support is for mentorship, specifically from experts in AI/ML, digital health, and Maternal, Sexual, and Reproductive Health (MSRH) to refine solutions, ensure clinical accuracy, address ethical considerations, and guide the development and deployment of scalable solutions, particularly in low-resource settings.
+* **Access to Resources and Infrastructure:** Participants consistently requested access to relevant, high-quality, and anonymized MSRH datasets for model training and validation, along with cloud computing credits (e.g., Azure, GCP, Firebase) or GPU support for efficient development, testing, and hosting of AI models.
+* **Financial and Logistical Support:** Many respondents asked for financial support or funding to cover costs such as internet/data access, prototyping resources, APIs, travel/accommodation for in-person events, and seed funding for scaling Minimal Viable Products (MVPs).
+* **Product Development and Scaling:** Support is needed for prototyping tools, user-centered design, clinical validation, regulatory alignment in different African regions, guidance on scaling solutions, developing sustainable business models, and securing post-challenge support like incubation and partnerships.
+* **Collaboration and Networking:** Respondents value opportunities for networking, peer collaboration, and establishing partnerships with health institutions, clinicians, and community stakeholders for user testing and pilot implementation.
+
+### Other Suggestions
+
+Respondents indicated several additional suggestions critical to the innovation challenge. This included:
+
+* **Continued Support and Scaling:** There is a critical need for sustained support beyond the challenge, including incubation opportunities, funding pathways (grants/investment), partnerships for real-world piloting and implementation, and mentorship to help promising solutions transition from prototypes to scalable, lasting impacts across African health settings.
+* **Enhanced Mentorship and Resources:** Participants frequently requested continuous, structured mentorship and regular feedback sessions throughout the challenge. They also highlighted the need for access to real-world datasets (especially MSRH-specific data) and technical resources to strengthen solution development.
+* **Focus on Local Context and Ethics:** Suggestions emphasized strongly focusing on solutions that are ethical, inclusive, and grounded in local contexts, including addressing low-resource and low-connectivity environments ("Offline-First" functionality), ensuring multilingual support, and incorporating community health worker/end-user perspectives directly into the co-design process.
+* **Collaboration and Learning Opportunities:** Many respondents expressed excitement and motivation to participate, collaborate with multidisciplinary teams (bridging the gap between technical innovators and clinicians), network with peers/experts, and strengthen their skills in AI for maternal, sexual, and reproductive health (MSRH).
+* **Competition Structure and Transparency:** A few specific requests included reconsidering team arrangements (e.g., minimum 3 members, gender balance), providing clear evaluation criteria and milestone dates, and offering non-monetary incentives for all participants, such as free online courses.
+
+\newpage
+
+# **Capacity Building Session 1**
+
+The first capacity-building session for the **AI for Reproductive Health in Sub-Saharan Africa Innovation Challenge** was conducted online on `r format(as.Date("11/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` from `r format(as.POSIXct(paste(as.Date("11/05/2026", format = "%d/%m/%Y"), "14:30:00"), tz = "Africa/Nairobi"), "%H:%M")` to `r format(as.POSIXct(paste(as.Date("11/05/2026", format = "%d/%m/%Y"), "16:30:00"), tz = "Africa/Nairobi"), "%H:%M %Z")`. The session aimed to orient participants to the innovation challenge and strengthen their understanding of key areas relevant to AI research and implementation in reproductive health. A total of **19 teams, together with their respective team members**, attended the capacity-building session.
+
+The session began with opening remarks, followed by a presentation on the expectations for the innovation challenge delivered by the **Infectious Diseases Institute (IDI)**. It outlined the two innovation tracks, evaluation criteria, and important timelines, including a four-week challenge period ending `r format(as.Date("6/06/2026", format = "%d/%m/%Y"),"%d %B %Y")`, with presentations scheduled for `r format(as.Date("11/06/2026", format = "%d/%m/%Y"),"%d %B %Y")`. Subsequent presentations, all facilitated by representatives from the **African Population and Health Research Center (APHRC)**, focused on comprehensive data governance principles and compliance requirements, emphasizing ethical data use and privacy protection; capacity strengthening through the [**Soma Platform**](https://soma.aphrc.org/); and access to datasets via the [**DASSA Platform**](https://dassa.aphrc.org/), showing the registration process and available project datasets in CSV format. 
+
+The session concluded with a question-and-answer segment that provided participants with an opportunity for clarification and discussion. Participants raised questions regarding dataset access, submission procedures, and future opportunities for winning teams. The organizers clarified that only one representative from each winning team would receive funding to attend the award ceremony during the Data Science Africa 2026 Workshop in July 2026.
+
+\newpage
+
+# **Check-In Session**
+
+The check-in session for the **AI for Reproductive Health in Sub-Saharan Africa Innovation Challenge** was conducted online on `r format(as.Date("26/05/2026", format = "%d/%m/%Y"),"%d %B %Y")` from `r format(as.POSIXct(paste(as.Date("26/05/2026", format = "%d/%m/%Y"), "14:00:00"), tz = "Africa/Nairobi"), "%H:%M")` to `r format(as.POSIXct(paste(as.Date("26/05/2026", format = "%d/%m/%Y"), "16:00:00"), tz = "Africa/Nairobi"), "%H:%M %Z")`. The session, delivered by the **African Population and Health Research Center (APHRC)**, aimed to assess and monitor progress made by participating teams in prototype development, address emerging support needs, and inform upcoming capacity-building initiatives designed for continued technical and professional development. A total of `r sum(df_raw_soi_final_teams$attended_checkin_session %in% c("yes"), na.rm = TRUE)` out of the `r sum(df_raw_soi_final_teams$confirmed %in% c("yes"), na.rm = TRUE)` participating teams attended the check-in session.
+
+The core of the session focused on team progress updates. Teams were guided to report their advancement across four key stages of solution development:
+
+1. Demonstrate progress in problem definition by refining the specific reproductive health challenge they intended to address and clarifying the clinical scope of their proposed interventions. 
+2. Provide updates on data use activities, including identification of relevant datasets from the [**DASSA Platform**](https://dassa.aphrc.org/) and other sources, progress in obtaining data access, and efforts related to data cleaning, quality assurance, exploratory data analysis, and preparation for artificial intelligence and machine learning applications. 
+3. Prototype development activities, highlighting the creation and evaluation of baseline models, incorporation of explainability approaches, development of web or mobile applications and data analytics tools, and considerations for deployment architecture and continuous integration/continuous deployment (CI/CD) processes. 
+4. Share plans and experiences related to testing and clinical validation, including usability assessments, engagement with clinicians and healthcare experts, and strategies for validating proposed solutions in real-world settings.
+
+The meeting concluded with an interactive question-and-answer session that enabled participants to seek clarification and discuss challenges encountered during project implementation. Key issues raised included:
+
+- Access to datasets through the DASSA platform, which some teams identified as a constraint to advancing data-driven solution development. In response, the APHRC team provided a walkthrough of the dataset access process, explaining the steps required to register on the platform, request membership in the AI for Reproductive Health in Africa Innovation Challenge community, and gain access to the datasets available for the challenge.
+- Concerns regarding the diversity, completeness, and usability of datasets available on the DASSA platform. Some teams indicated that the available datasets did not fully meet the requirements of their proposed solutions and therefore supplemented their work with publicly available datasets from other sub-Saharan African countries and regional data repositories. In response, the APHRC team acknowledged these challenges and encouraged teams to document any external datasets used, ensuring that they complied with relevant data governance, licensing, and ethical requirements.
+- Participants also sought recommendations on suitable deployment environments that would support continuous availability and real-time updates of their applications. In response, it was recommended that teams consider using virtual private server (VPS) providers such as DigitalOcean or Contabo, both of which offer reliable infrastructure for continuous deployment, greater control over application hosting, and support for real-time system updates. Additionally, teams were encouraged to explore Railway, which provides a developer-friendly deployment platform with a free tier, built-in Docker support, GitHub integration, and pre-configured CI/CD pipelines, making it particularly suitable for rapid prototyping and early-stage application deployment. These recommendations aimed to help teams overcome limitations associated with free-tier hosting services that may become inactive after periods of inactivity and to ensure more stable and scalable deployment of their AI-powered reproductive health solutions.
+
+The check-in session served as an important milestone for monitoring project progress, identifying technical support requirements, and reinforcing the innovation challenge's commitment to building sustainable AI-driven solutions for reproductive health in Sub-Saharan Africa.
+
+\newpage
+
+# **Capacity Building Session 2**
+
+The second capacity-building session for the **AI for Reproductive Health in Sub-Saharan Africa Innovation Challenge** was conducted online on `r format(as.Date("04/06/2026", format = "%d/%m/%Y"),"%d %B %Y")` from `r format(as.POSIXct(paste(as.Date("04/06/2026", format = "%d/%m/%Y"), "14:00:00"), tz = "Africa/Nairobi"), "%H:%M")` to `r format(as.POSIXct(paste(as.Date("04/06/2026", format = "%d/%m/%Y"), "15:30:00"), tz = "Africa/Nairobi"), "%H:%M %Z")`. The session was organized by the **African Population and Health Research Center (APHRC)** to strengthen participants' non-technical and governance-related competencies that are essential for developing, communicating, and responsibly deploying AI-driven solutions in reproductive health.
+
+The first presentation focused on **Communication, Pitching, and Storytelling** and emphasized the importance of effectively communicating innovation ideas to diverse audiences, including healthcare practitioners, policymakers, funders, and end users. Participants were guided on how to develop compelling narratives around their projects, articulate the problem being addressed, clearly communicate the value proposition of their solutions, and structure persuasive pitches that demonstrate both technical feasibility and potential impact. The session highlighted storytelling as a critical skill for translating complex AI concepts into messages that resonate with stakeholders and support resource mobilization and adoption of innovative solutions.
+
+The second presentation focused on **AI Governance and Responsible Innovation** and explored the principles and practices required to ensure that AI technologies are developed and deployed ethically, safely, and responsibly. Participants were introduced to key considerations in AI governance, including accountability, transparency, fairness, privacy, data protection, and risk management. The discussion emphasized the importance of embedding responsible innovation practices throughout the solution development lifecycle to ensure that AI systems are trustworthy, equitable, and aligned with the needs and rights of the communities they serve. Particular attention was given to the governance challenges associated with health data and the need for innovators to consider ethical implications when designing and implementing AI-enabled reproductive health interventions.
+
+By combining innovation communication strategies with ethical and governance considerations, the session provided teams with the competencies needed to effectively present their solutions, engage stakeholders, and develop AI applications that are both impactful and socially responsible.
+
+\newpage
+
+# **Appendix** {-}
+
+## A. Needs Assessment Survey Demographic Figures {.unnumbered}
+
+```{r, fig.cap = "Figure A1: Overall demographics"}
+ggtheme_descriptive_plot()
+#ggtheme_descriptive_plot_blank_yaxis(textsize_xaxis=12)
+simple_plot_grid(df = df_clean_capacity_building_final
+                 , vars = c("gender", "age", "age_group", "highest_level_of_education")
+                 , x_axis_label_wrap_width = 5
+                 , y_axis_breaks = 12
+                 , title_label = NULL
+                 , expand_yaxis = c(0.01,0.07)
+                 , bar_fill_colour = GREEN3
+                 , grid_ncol =  2
+                 )
+```
+

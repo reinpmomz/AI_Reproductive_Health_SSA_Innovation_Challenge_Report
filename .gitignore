@@ -1,0 +1,22 @@
+# Rhistory
+*.Rhistory
+
+# Rdata files
+*.RData
+
+# rds files
+*.rds
+
+# sav files
+*.sav
+
+# dta files
+*.dta
+
+# csv files
+*.csv
+
+# excel files
+*.xlsx
+!2.load_data_and_clean/*.xlsx
+!Output/*.xlsx
