@@ -16,8 +16,8 @@ real-world deployment across two thematic tracks
 
 ## Setup
 
-We are assuming you have `R Software` and `Rstudio IDE` installed. If not you can download and install 
-[**R software**](https://www.r-project.org/) then followed by [**RStudio/Posit IDE**](https://posit.co/download/rstudio-desktop/).
+We are assuming you have `R Software` and `RStudio IDE` installed. If not, you can download and install 
+[**R software**](https://www.r-project.org/), followed by [**Rtools**](https://cran.r-project.org/bin/windows/Rtools/) corresponding to your R version then [**RStudio/Posit IDE**](https://posit.co/download/rstudio-desktop/).
 
 ## Data
 
